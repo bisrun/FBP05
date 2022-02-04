@@ -14,11 +14,13 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from redis_geo import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('redis_geo/<int:version>/insert',views.insert ),
-    path('redis_geo/<int:version>/select',views.select ),
+    # flywhale
+    path('redis_geo/', include('redis_geo.urls')),
+    #path('redis_geo/<int:version>/insert',views.insert ),
+    #path('redis_geo/<int:version>/select',views.select ),
 ]

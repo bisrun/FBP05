@@ -1,0 +1,12 @@
+{% if lastest_question_list %}
+    <ul>
+        {%  for question in last_question_list %}
+        <li>
+            <a href="/redis_geo/{{ question.id }}/">{{ question.question.text }}</a>
+        </li>
+    </ul>
+{% else %}
+<p>
+    No poll are available.
+</p>
+{% endif %}
