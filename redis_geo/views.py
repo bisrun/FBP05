@@ -1,15 +1,18 @@
+import json
+
 from django.shortcuts import get_object_or_404,render
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.urls import reverse
 
 
 from redis_geo.models import Choice, Question
+from django.views.decorators.csrf import csrf_exempt
 
 
-def index(request):
+def questions(request):
     latest_question_list = Question.objects.all().order_by('-pub_date')[:5]
     context = {'latest_question_list': latest_question_list}
-    return render(request, 'redis_geo/index.html', context)
+    return render(request, 'redis_geo/questions.html', context)
 
 def detail(request, question_id):
     question = get_object_or_404(Question, pk=question_id)
@@ -37,3 +40,27 @@ def vote(request, question_id):
         # with POST data. This prevents data from being posted twice if a
         # user hits the Back button.
         return HttpResponseRedirect(reverse('redis_geo:results', args=(question.id,)))
+
+def index(request):
+    return render(request, 'redis_geo/index.html')
+
+def setpoint(request):
+    if request.GET['settype'] == 1 :
+        print("param = ", request.GET['settype'])
+
+    data = {
+        "return-value": "success"
+    }
+    print("set point success!!!")
+    return JsonResponse(data)
+
+@csrf_exempt
+def selectpoint(request):
+    if request.method == 'POST':
+        body_json = json.loads(request.body)
+        data = {
+            "return-value": "success"
+        }
+        print("select point success!!!- ", body_json['title'])
+
+    return JsonResponse(data)
